@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+  php-env:
+    build: .
+    volumes:
+     - .:/var/www/html
+    ports:
+     - 7077:80
+   
+  mysql_db:
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: Redlock
+    volumes:
+      - ./redlock-db.sql:/docker-entrypoint-initdb.d/redlock-db.sql
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: always
+    ports:
+      - 8001:80
+    environment:
+      - PMA_ARBITRARY=1
